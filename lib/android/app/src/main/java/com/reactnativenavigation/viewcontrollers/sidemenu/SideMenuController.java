@@ -127,23 +127,21 @@ public class SideMenuController extends ParentController<DrawerLayout> {
 
     private void updateLeftController(ViewController controller) {
         if (controller == null) return;
-        int width = this.getWidth(options.sideMenuRootOptions.left);
-        int height = this.getHeight(options.sideMenuRootOptions.left);
-        if (getView().indexOfChild(controller.getView()) != -1) {
-            controller.getView().setLayoutParams(new LayoutParams(width, height, Gravity.LEFT));
-        } else {
-            getView().addView(controller.getView(), new LayoutParams(width, height, Gravity.LEFT));
-        }
+        this.updateView(controller.getView(), options.sideMenuRootOptions.left, Gravity.LEFT);
     }
 
     private void updateRightController(ViewController controller) {
         if (controller == null) return;
-        int width = this.getWidth(options.sideMenuRootOptions.right);
-        int height = this.getHeight(options.sideMenuRootOptions.right);
-        if (getView().indexOfChild(controller.getView()) != -1) {
-            controller.getView().setLayoutParams(new LayoutParams(width, height, Gravity.RIGHT));
+        this.updateView(controller.getView(), options.sideMenuRootOptions.right, Gravity.RIGHT);
+    }
+
+    private void updateView(View view, SideMenuOptions options, int gravity) {
+        int width = this.getWidth(options);
+        int height = this.getHeight(options);
+        if (getView().indexOfChild(view) != -1) {
+            view.setLayoutParams(new LayoutParams(width, height, gravity));
         } else {
-            getView().addView(controller.getView(), new LayoutParams(width, height, Gravity.RIGHT));
+            getView().addView(view, new LayoutParams(width, height, gravity));
         }
     }
 
