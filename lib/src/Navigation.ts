@@ -184,6 +184,13 @@ export class NavigationRoot {
   }
 
   /**
+   * dismiss all overlays
+   */
+  public dismissAllOverlays(): void {
+    this.commands.dismissAllOverlays();
+  }
+
+  /**
    * Resolves arguments passed on launch
    */
   public getLaunchArgs(): Promise<any> {

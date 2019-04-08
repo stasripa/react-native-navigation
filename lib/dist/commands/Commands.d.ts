@@ -27,5 +27,6 @@ export declare class Commands {
     setStackRoot(componentId: string, children: Layout[]): Promise<any>;
     showOverlay(simpleApi: Layout): Promise<any>;
     dismissOverlay(componentId: string): Promise<any>;
+    dismissAllOverlays(): void;
     getLaunchArgs(): Promise<any>;
 }
