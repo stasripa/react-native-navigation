@@ -14,7 +14,7 @@ interface NativeCommandsModule {
   dismissAllModals(commandId: string, options?: object): Promise<any>;
   showOverlay(commandId: string, layout: object): Promise<any>;
   dismissOverlay(commandId: string, componentId: string): Promise<any>;
-  dismissAllOverlays(commandId: string): void;
+  dismissAllOverlays(): void;
   getLaunchArgs(commandId: string): Promise<any>;
 }
 
@@ -76,8 +76,8 @@ export class NativeCommandsSender {
     return this.nativeCommandsModule.dismissOverlay(commandId, componentId);
   }
 
-  dismissAllOverlays(commandId: string) {
-    return this.nativeCommandsModule.dismissAllOverlays(commandId);
+  dismissAllOverlays() {
+    return this.nativeCommandsModule.dismissAllOverlays();
   }
 
   getLaunchArgs(commandId: string) {

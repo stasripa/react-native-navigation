@@ -83,7 +83,7 @@ export declare class NavigationRoot {
      */
     dismissOverlay(componentId: string): Promise<any>;
     /**
-     * dismiss overlay by componentId
+     * dismiss all overlays
      */
     dismissAllOverlays(): void;
     /**

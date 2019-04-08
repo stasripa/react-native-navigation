@@ -18,6 +18,6 @@ export declare class NativeCommandsSender {
     dismissAllModals(commandId: string, options?: object): Promise<any>;
     showOverlay(commandId: string, layout: object): Promise<any>;
     dismissOverlay(commandId: string, componentId: string): Promise<any>;
-    dismissAllOverlays(commandId: string): void;
+    dismissAllOverlays(): void;
     getLaunchArgs(commandId: string): Promise<any>;
 }
