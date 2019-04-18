@@ -87,7 +87,8 @@ public class LayoutFactory {
                 node.id,
                 parse(typefaceManager, node.getOptions()),
                 new SideMenuPresenter(),
-                new Presenter(activity, defaultOptions)
+                new Presenter(activity, defaultOptions),
+				this.reactInstanceManager
         );
 		ViewController childControllerCenter = null, childControllerLeft = null, childControllerRight = null;
 
