@@ -9,6 +9,8 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 
+import com.facebook.react.ReactInstanceManager;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.reactnativenavigation.parse.Options;
 import com.reactnativenavigation.parse.SideMenuOptions;
 import com.reactnativenavigation.parse.SideMenuRootOptions;
@@ -19,25 +21,36 @@ import com.reactnativenavigation.utils.CommandListener;
 import com.reactnativenavigation.viewcontrollers.ChildControllersRegistry;
 import com.reactnativenavigation.viewcontrollers.ParentController;
 import com.reactnativenavigation.viewcontrollers.ViewController;
-import com.reactnativenavigation.views.*;
+import com.reactnativenavigation.views.Component;
+import com.reactnativenavigation.views.SideMenu;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 public class SideMenuController extends ParentController<DrawerLayout> implements DrawerLayout.DrawerListener {
 
-	private ViewController center;
-	private ViewController left;
-	private ViewController right;
+    public static final String KEY_DRAWER_VISIBLE = "drawer_visible";
+    private final ReactInstanceManager reactInstanceManager;
+    private ViewController center;
+    private ViewController left;
+    private ViewController right;
     private SideMenuPresenter presenter;
     private int leftMenuWidth = MATCH_PARENT;
     private int rightMenuWidth = MATCH_PARENT;
 
-    public SideMenuController(Activity activity, ChildControllersRegistry childRegistry, String id, Options initialOptions, SideMenuPresenter sideMenuOptionsPresenter, Presenter presenter) {
-		super(activity, childRegistry, id, presenter, initialOptions);
+    public SideMenuController(Activity activity,
+                              ChildControllersRegistry childRegistry,
+                              String id,
+                              Options initialOptions,
+                              SideMenuPresenter sideMenuOptionsPresenter,
+                              Presenter presenter,
+                              ReactInstanceManager reactInstanceManager) {
+        super(activity, childRegistry, id, presenter, initialOptions);
         this.presenter = sideMenuOptionsPresenter;
+        this.reactInstanceManager = reactInstanceManager;
     }
 
     @Override
@@ -116,6 +129,8 @@ public class SideMenuController extends ParentController<DrawerLayout> implement
 
     @Override
     public void onDrawerOpened(@NonNull View drawerView) {
+        DeviceEventManagerModule.RCTDeviceEventEmitter emitter = reactInstanceManager.getCurrentReactContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class);
+        emitter.emit(KEY_DRAWER_VISIBLE, true);
 //        ViewController view = this.getMatchingView(drawerView);
 //        view.mergeOptions(this.getOptionsWithVisability(this.viewIsLeft(drawerView), true));
 //        view.onViewAppeared();
@@ -123,6 +138,8 @@ public class SideMenuController extends ParentController<DrawerLayout> implement
 
     @Override
     public void onDrawerClosed(@NonNull View drawerView) {
+        DeviceEventManagerModule.RCTDeviceEventEmitter emitter = reactInstanceManager.getCurrentReactContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class);
+        emitter.emit(KEY_DRAWER_VISIBLE, false);
 //        ViewController view = this.getMatchingView(drawerView);
 //        view.mergeOptions(this.getOptionsWithVisability(this.viewIsLeft(drawerView), false));
 //        view.onViewDisappear();
@@ -220,6 +237,7 @@ public class SideMenuController extends ParentController<DrawerLayout> implement
 
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void onDrawerStateChanged(int newState) {
 
