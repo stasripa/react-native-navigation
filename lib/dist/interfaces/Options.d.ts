@@ -218,6 +218,10 @@ export interface OptionsTopBarBackground {
      */
     component?: {
         name?: string;
+        /**
+         * Properties to pass down to the component
+         */
+        passProps?: object;
     };
     /**
      * Allows the NavBar to be translucent (blurred)
@@ -303,7 +307,10 @@ export interface OptionsTopBar {
     /**
      * Change button colors in the top bar
      */
-    buttonColor?: Color;
+    leftButtonColor?: Color;
+    rightButtonColor?: Color;
+    leftButtonDisabledColor?: Color;
+    rightButtonDisabledColor?: Color;
     /**
      * Draw behind the navbar
      */
@@ -573,11 +580,16 @@ export interface OptionsSideMenu {
      */
     openGestureMode?: 'entireScreen' | 'bezel';
 }
-export interface OptionsOverlay {
+export interface OverlayOptions {
     /**
      * Capture touches outside of the Component View
      */
     interceptTouchOutside?: boolean;
+    /**
+     * Control wether this Overlay should handle Keyboard events.
+     * Set this to true if your Overlay contains a TextInput.
+     */
+    handleKeyboardEvents?: boolean;
 }
 export interface OptionsPreviewAction {
     /**
@@ -842,7 +854,7 @@ export interface Options {
     /**
      * Configure the overlay
      */
-    overlay?: OptionsOverlay;
+    overlay?: OverlayOptions;
     /**
      * Animation used for navigation commands that modify the layout
      * hierarchy can be controlled in options.
