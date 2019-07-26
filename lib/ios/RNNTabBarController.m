@@ -8,8 +8,20 @@
 	return self;
 }
 
+- (void)viewDidLayoutSubviews {
+	[self.presenter viewDidLayoutSubviews];
+}
+
 - (UIViewController *)getCurrentChild {
 	return self.selectedViewController;
+}
+
+- (CGFloat)getTopBarHeight {
+    for(UIViewController * child in [self childViewControllers]) {
+        CGFloat childTopBarHeight = [child getTopBarHeight];
+        if (childTopBarHeight > 0) return childTopBarHeight;
+    }
+    return [super getTopBarHeight];
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations {

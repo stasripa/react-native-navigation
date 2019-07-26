@@ -27,11 +27,15 @@ const popToRoot = (self) => Navigation.popToRoot(self.props.componentId);
 
 const mergeOptions = (selfOrCompId, options) => Navigation.mergeOptions(compId(selfOrCompId), options);
 
-const setStackRoot = (self, root) => Navigation.setStackRoot(self.props.componentId, root)
+const setStackRoot = (self, root) => Navigation.setStackRoot(self.props.componentId, root);
+
+const setRoot = (root) => Navigation.setRoot(root.root ? root : { root: component(root, {}) });
 
 const compId = (selfOrCompId) => {
   return get(selfOrCompId, 'props.componentId', selfOrCompId);
 }
+
+const constants = Navigation.constants;
 
 module.exports = {
   mergeOptions,
@@ -47,7 +51,8 @@ module.exports = {
   events: Navigation.events.bind(Navigation),
   popTo: Navigation.popTo.bind(Navigation),
   setDefaultOptions: Navigation.setDefaultOptions.bind(Navigation),
-  setRoot: Navigation.setRoot.bind(Navigation),
+  setRoot,
   TouchablePreview: Navigation.TouchablePreview,
-  setStackRoot
+  setStackRoot,
+  constants
 }

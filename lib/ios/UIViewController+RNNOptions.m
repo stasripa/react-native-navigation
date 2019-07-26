@@ -1,5 +1,7 @@
 #import "UIViewController+RNNOptions.h"
 #import <React/RCTRootView.h>
+#import "UIImage+tint.h"
+#import "RNNBottomTabOptions.h"
 
 #define kStatusBarAnimationDuration 0.35
 const NSInteger BLUR_STATUS_TAG = 78264801;
@@ -79,14 +81,17 @@ const NSInteger BLUR_STATUS_TAG = 78264801;
 	}
 }
 
-- (void)rnn_setTabBarItemBadge:(NSString *)badge {
-	UITabBarItem *tabBarItem = self.tabBarItem;
-	
-	if ([badge isKindOfClass:[NSNull class]] || [badge isEqualToString:@""]) {
-		tabBarItem.badgeValue = nil;
-	} else {
-		tabBarItem.badgeValue = badge;
-	}
+- (void)rnn_setTabBarItemBadge:(RNNBottomTabOptions *)bottomTab {
+    UITabBarItem *tabBarItem = self.tabBarItem;
+
+    NSString *badge = [bottomTab.badge get];
+    if ([badge isKindOfClass:[NSNull class]] || [badge isEqualToString:@""]) {
+        tabBarItem.badgeValue = nil;
+    } else {
+        tabBarItem.badgeValue = badge;
+        [[self.tabBarController.tabBar viewWithTag:tabBarItem.tag] removeFromSuperview];
+        tabBarItem.tag = -1;
+    }
 }
 
 - (void)rnn_setTabBarItemBadgeColor:(UIColor *)badgeColor {
@@ -160,6 +165,25 @@ const NSInteger BLUR_STATUS_TAG = 78264801;
 		RCTRootView* rootView = (RCTRootView*)self.view;
 		rootView.passThroughTouches = !interceptTouchOutside;
 	}
+}
+
+- (void)rnn_setBackButtonIcon:(UIImage *)icon withColor:(UIColor *)color title:(NSString *)title {
+	UIBarButtonItem *backItem = [[UIBarButtonItem alloc] init];
+	if (icon) {
+		backItem.image = color
+		? [[icon withTintColor:color] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]
+		: icon;
+		
+		[self.navigationController.navigationBar setBackIndicatorImage:[UIImage new]];
+		[self.navigationController.navigationBar setBackIndicatorTransitionMaskImage:[UIImage new]];
+	}
+	
+	UIViewController *lastViewControllerInStack = self.navigationController.viewControllers.count > 1 ? [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count-2] : self.navigationController.topViewController;
+	
+	backItem.title = title ? title : lastViewControllerInStack.navigationItem.title;
+	backItem.tintColor = color;
+	
+	lastViewControllerInStack.navigationItem.backBarButtonItem = backItem;
 }
 
 @end

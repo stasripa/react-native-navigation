@@ -4,17 +4,19 @@
 
 const NSInteger TOP_BAR_TRANSPARENT_TAG = 78264803;
 
-@interface RNNNavigationController()
-
-@property (nonatomic, strong) NSMutableDictionary* originalTopBarImages;
-
-@end
-
 @implementation RNNNavigationController
 
+- (void)viewDidLayoutSubviews {
+	[super viewDidLayoutSubviews];
+	[self.presenter applyOptionsOnViewDidLayoutSubviews:self.resolveOptions];
+}
 
 - (UIViewController *)getCurrentChild {
 	return self.topViewController;
+}
+
+- (CGFloat)getTopBarHeight {
+	return self.navigationBar.frame.size.height;
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations {
@@ -55,7 +57,6 @@ const NSInteger TOP_BAR_TRANSPARENT_TAG = 78264803;
 		
 		if (bgColorAlpha == 0.0) {
 			if (![self.navigationBar viewWithTag:TOP_BAR_TRANSPARENT_TAG]){
-				[self storeOriginalTopBarImages:self];
 				UIView *transparentView = [[UIView alloc] initWithFrame:CGRectZero];
 				transparentView.backgroundColor = [UIColor clearColor];
 				transparentView.tag = TOP_BAR_TRANSPARENT_TAG;
@@ -70,36 +71,16 @@ const NSInteger TOP_BAR_TRANSPARENT_TAG = 78264803;
 			UIView *transparentView = [self.navigationBar viewWithTag:TOP_BAR_TRANSPARENT_TAG];
 			if (transparentView){
 				[transparentView removeFromSuperview];
-				[self.navigationBar setBackgroundImage:self.originalTopBarImages[@"backgroundImage"] forBarMetrics:UIBarMetricsDefault];
-				self.navigationBar.shadowImage = self.originalTopBarImages[@"shadowImage"];
-				self.originalTopBarImages = nil;
 			}
 		}
 	} else {
 		UIView *transparentView = [self.navigationBar viewWithTag:TOP_BAR_TRANSPARENT_TAG];
 		if (transparentView){
 			[transparentView removeFromSuperview];
-			[self.navigationBar setBackgroundImage:self.originalTopBarImages[@"backgroundImage"] ? self.originalTopBarImages[@"backgroundImage"] : [self.navigationBar backgroundImageForBarMetrics:UIBarMetricsDefault] forBarMetrics:UIBarMetricsDefault];
-			self.navigationBar.shadowImage = self.originalTopBarImages[@"shadowImage"] ? self.originalTopBarImages[@"shadowImage"] : self.navigationBar.shadowImage;
-			self.originalTopBarImages = nil;
 		}
 		
 		self.navigationBar.barTintColor = nil;
 	}
 }
-
-- (void)storeOriginalTopBarImages:(UINavigationController *)navigationController {
-	NSMutableDictionary *originalTopBarImages = [@{} mutableCopy];
-	UIImage *bgImage = [navigationController.navigationBar backgroundImageForBarMetrics:UIBarMetricsDefault];
-	if (bgImage != nil) {
-		originalTopBarImages[@"backgroundImage"] = bgImage;
-	}
-	UIImage *shadowImage = navigationController.navigationBar.shadowImage;
-	if (shadowImage != nil) {
-		originalTopBarImages[@"shadowImage"] = shadowImage;
-	}
-	self.originalTopBarImages = originalTopBarImages;
-}
-
 
 @end

@@ -1,8 +1,4 @@
 #import "RNNRootViewController.h"
-#import <React/RCTConvert.h>
-#import "RNNAnimator.h"
-#import "RNNPushAnimation.h"
-#import "RNNReactView.h"
 #import "RNNAnimationsTransitionDelegate.h"
 #import "UIViewController+LayoutProtocol.h"
 
@@ -33,7 +29,7 @@
 
 - (void)mergeOptions:(RNNNavigationOptions *)options {
 	[_presenter mergeOptions:options currentOptions:self.options defaultOptions:self.defaultOptions];
-	[((UIViewController<RNNLayoutProtocol> *)self.parentViewController) mergeOptions:options];
+	[self.parentViewController mergeOptions:options];
 }
 
 - (void)overrideOptions:(RNNNavigationOptions *)options {
@@ -59,7 +55,7 @@
 	[_presenter applyOptions:self.resolveOptions];
 	[_presenter renderComponents:self.resolveOptions perform:nil];
 	
-	[((UIViewController *)self.parentViewController) onChildWillAppear];
+	[self.parentViewController onChildWillAppear];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -104,6 +100,10 @@
 
 - (UIViewController *)getCurrentChild {
 	return nil;
+}
+
+- (CGFloat)getTopBarHeight {
+    return [[self getCurrentChild] getTopBarHeight];
 }
 
 -(void)updateSearchResultsForSearchController:(UISearchController *)searchController {
